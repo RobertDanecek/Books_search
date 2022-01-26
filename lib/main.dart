@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'IT Books search',
+      title: 'IT Books search ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -36,17 +36,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool listPicture = false;
-  int numberFound = -1;
-  String keyWord = '';
-  int page = 0;
 
+  bool listPicture = true; //chose List view or Image view
+  int numberFound = -1;  //number of found books
+  String keyWord = '';  //searchin keqword
+  int page = 0;         //actual page number
+
+  //list of books in this page
   dynamic bookList = [];
-//  Map abcd=[] as Map;
 
+  // Text editor controller
   TextEditingController bookNameTextController = TextEditingController();
 
-  void _search_books(String bookName, int searchPage) async {
+  // book searchin engine
+  void _searchbooks(String bookName, int searchPage) async {
     FocusManager.instance.primaryFocus?.unfocus();
     final http.Response response;
     keyWord = bookName;
@@ -74,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // widget Books list choice
   Widget booksListWidget() {
     return Column(children: <Widget>[
       for (var item in bookList)
@@ -98,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
+  // click widget
   Widget booksItemLink(double pictSize, Map item) {
     return InkWell(
         onTap: () {
@@ -107,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Image.network(item['image'], width: pictSize, height: pictSize));
   }
 
+  // widget picture list choice
   Widget booksPictureWidget(context) {
     List<Widget> list = [];
 
@@ -144,10 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // searching helper function
   void _startSearch()
   {
     page = 1;
-    _search_books(bookNameTextController.text, 0);
+    _searchbooks(bookNameTextController.text, 0);
 
   }
 
@@ -226,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             onTap: () {
                               if (page > 1) {
                                 page--;
-                                _search_books(keyWord, page);
+                                _searchbooks(keyWord, page);
                               }
                             },
                             child: Icon(
@@ -242,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             onTap: () {
                               if (page < (numberFound ~/ 10) + 1) {
                                 page++;
-                                _search_books(keyWord, page);
+                                _searchbooks(keyWord, page);
                               }
                             },
                             child: Icon(
